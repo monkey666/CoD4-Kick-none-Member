@@ -1,5 +1,5 @@
-
-;_KickNonMember("127.0.0.1", 28960, "password", "MyClan.txt")
+;Example of usage
+;_KickNonMember("127.0.0.1", 28960, "password", "Guid.txt")
 
 
 
@@ -20,7 +20,7 @@
 ; Example .......: No
 ; ===============================================================================================================================
 Func _KickNonMember($sIP, $iPort, $sRcon, $sGuidFile = "Guid.txt")
-	Local $aPlayer = __getplayer($sIP, $iPort, $sRcon), $iPlayerZahl, $aGUID, $fMember
+	Local $aPlayer = __GetPlayer($sIP, $iPort, $sRcon), $iPlayerZahl, $aGUID, $fMember
 	$iPlayerZahl = UBound($aPlayer)
 	$aGUID = StringRegExp(FileRead($sGuidFile), "([0-9a-f]{8})\s+.+?", 3)
 	Dim $iKicked = 0
