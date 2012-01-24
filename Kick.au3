@@ -1,5 +1,5 @@
 ;Example of usage
-;_KickNonMember("127.0.0.1", 28960, "password", "Guid.txt")
+_KickNonMember("127.0.0.1", 28960, "Rcon Password", "Guid.txt")
 
 
 
@@ -163,5 +163,6 @@ EndFunc   ;==>_getplayer
 ; ===============================================================================================================================
 Func __FormHeader($sCommand)
 	Local $sHeader
-	Return $sHeader=Chr(Dec("255"))&Chr(Dec("255"))&Chr(Dec("255"))&Chr(Dec("255"))&$sCommand&Chr(Dec("00"))
+	$sHeader=Chr(Dec("FF"))&Chr(Dec("FF"))&Chr(Dec("FF"))&Chr(Dec("FF"))&$sCommand&Chr(Dec("00"))
+	Return $sHeader
 EndFunc
