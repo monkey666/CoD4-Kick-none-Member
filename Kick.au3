@@ -61,13 +61,11 @@ EndFunc   ;==>_KickNonMember
 ; Example .......: No
 ; ===============================================================================================================================
 Func __Cod_say($sText, $sIP, $iPort, $sRcon)
-	Local $fSaid = False, $sHeader, $aSocket, $hTimer, $sRecv
-	$sHeader = "ÿÿÿÿ rcon " & $sRcon & " say " & '"' & $sText & '"' & @CRLF & _
-			"." & @CRLF & @CRLF
+	Local $fSaid = False, $aSocket, $hTimer, $sRecv
 	Do
 		UDPStartup()
 		$aSocket = UDPOpen($sIP, $iPort)
-		UDPSend($aSocket, $sHeader)
+		UDPSend($aSocket, __FormHeader("rcon " & $sRcon & " say " & '"' & $sText & '"'))
 		$hTimer = TimerInit()
 		Do
 			$sRecv = UDPRecv($aSocket, 2048)
@@ -97,13 +95,12 @@ EndFunc   ;==>_Cod_say
 ; Example .......: No
 ; ===============================================================================================================================
 Func __KickPlayer($iID, $sIP, $iPort, $sRcon)
-	Local $fKicked = False, $sHeader, $aSocket, $hTimer, $sRecv
-	$sHeader = "ÿÿÿÿ rcon " & $sRcon & " clientkick " & $iID & @CRLF & _
-			"." & @CRLF & @CRLF
+	Local $fKicked = False, $aSocket, $hTimer, $sRecv
+
 	Do
 		UDPStartup()
 		$aSocket = UDPOpen($sIP, $iPort)
-		UDPSend($aSocket, $sHeader)
+		UDPSend($aSocket, __FormHeader("rcon " & $sRcon & " clientkick " & $iID))
 		$hTimer = TimerInit()
 		Do
 			$sRecv = UDPRecv($aSocket, 2048)
@@ -132,13 +129,12 @@ EndFunc   ;==>_KickPlayer
 ; Example .......: No
 ; ===============================================================================================================================
 Func __GetPlayer($sIP, $iPort, $sRcon)
-	Local $aPlayer, $fData = False, $sHeader, $aSocket, $hTimer, $sRecv
-	$sHeader = "ÿÿÿÿ rcon " & $sRcon & " status" & @CRLF & _
-			"." & @CRLF & @CRLF
+	Local $aPlayer, $fData = False, $aSocket, $hTimer, $sRecv
+
 	Do
 		UDPStartup()
 		$aSocket = UDPOpen($sIP, $iPort)
-		UDPSend($aSocket, $sHeader)
+		UDPSend($aSocket, __FormHeader("rcon " & $sRcon & " status"))
 		$hTimer = TimerInit()
 		Do
 			$sRecv = UDPRecv($aSocket, 2048)
@@ -151,3 +147,21 @@ Func __GetPlayer($sIP, $iPort, $sRcon)
 	$aPlayer = StringRegExp($sRecv, '\s(\d+).+?([0-9a-f]{8})\s', 3)
 	Return $aPlayer
 EndFunc   ;==>_getplayer
+
+; #INTERNAL_USE_ONLY# ===========================================================================================================
+; Name ..........: __FormHeader
+; Description ...: Returns a string with the command to send.
+; Syntax ........: __FormHeader($sCommand)
+; Parameters ....: $sCommand            - A string value.
+; Return values .: Returns a string with the command to send.
+; Author ........: Monkey
+; Modified ......:
+; Remarks .......:
+; Related .......:
+; Link ..........:
+; Example .......: No
+; ===============================================================================================================================
+Func __FormHeader($sCommand)
+	Local $sHeader
+	Return $sHeader=Chr(Dec("255"))&Chr(Dec("255"))&Chr(Dec("255"))&Chr(Dec("255"))&$sCommand&Chr(Dec("00"))
+EndFunc
